@@ -8,6 +8,15 @@ import (
 	"github.com/ga42quy/go-alpha-vantage/connection"
 )
 
+// OHLCV is the struct for the open, high, low, close, and volume of a financial instrument
+type OHLCV struct {
+	Open   float64 `json:"1. open"`
+	High   float64 `json:"2. high"`
+	Low    float64 `json:"3. low"`
+	Close  float64 `json:"4. close"`
+	Volume float64 `json:"5. volume"`
+}
+
 // IntradayInterval is the interval between two consecutive data points in the time series.
 type IntradayInterval string
 
@@ -19,13 +28,6 @@ const (
 	SIXTY_MIN   IntradayInterval = "60min"
 )
 
-type IntradayOutputSize string
-
-const (
-	COMPACT IntradayOutputSize = "compact"
-	FULL    IntradayOutputSize = "full"
-)
-
 // Request for intraday stock price time series.
 type IntradayRequest struct {
 	Interval          IntradayInterval
@@ -34,7 +36,7 @@ type IntradayRequest struct {
 	SkipExtendedHours bool
 	//Optional Month in the format YYYY-MM
 	Month      string
-	OutputSize IntradayOutputSize
+	OutputSize OutputSize
 }
 
 // Response of a IntradayRequest
@@ -73,7 +75,7 @@ func (r *IntradayRequest) ParseResponse(response *http.Response) (interface{}, e
 	if response.StatusCode != 200 {
 		return nil, fmt.Errorf("Error during Intraday Request. Status %v", response.StatusCode)
 	}
-	series, err := ParsePricesTimeSeriesCSV(response.Body)
+	series, err := parseTimeSeriesCSV(response.Body, time.DateTime)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse Intraday response: %w", err)
 	}

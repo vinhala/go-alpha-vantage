@@ -4,17 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/joho/godotenv"
-
 	"github.com/ga42quy/go-alpha-vantage/connection"
 )
 
-func loadEnvFile() {
-	godotenv.Load("../.env")
-}
-
 func TestIntraday5MinCompact(t *testing.T) {
-	loadEnvFile()
 	connection := connection.NewAlphaVantageConnection()
 	request := IntradayRequest{
 		Symbol:     "IBM",
@@ -55,7 +48,6 @@ func TestIntraday5MinCompact(t *testing.T) {
 }
 
 func TestIntraday5MinFull(t *testing.T) {
-	loadEnvFile()
 	connection := connection.NewAlphaVantageConnection()
 	request := IntradayRequest{
 		Symbol:     "IBM",
@@ -96,7 +88,6 @@ func TestIntraday5MinFull(t *testing.T) {
 }
 
 func TestIntraday5MinCustomMonth(t *testing.T) {
-	loadEnvFile()
 	connection := connection.NewAlphaVantageConnection()
 	request := IntradayRequest{
 		Symbol:     "IBM",

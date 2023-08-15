@@ -1,75 +1,77 @@
 package corestock
 
 import (
-	"encoding/csv"
 	"fmt"
 	"io"
 	"strconv"
 	"time"
+
+	"github.com/ga42quy/go-alpha-vantage/parsers"
 )
 
-// Columns of csv timeseries
+type OutputSize string
+
 const (
-	timestamp = iota
-	open
-	high
-	low
-	close
-	volume
+	COMPACT OutputSize = "compact"
+	FULL    OutputSize = "full"
 )
-
-// OHLCV is the struct for the open, high, low, close, and volume of a financial instrument
-type OHLCV struct {
-	Open   float64 `json:"1. open"`
-	High   float64 `json:"2. high"`
-	Low    float64 `json:"3. low"`
-	Close  float64 `json:"4. close"`
-	Volume float64 `json:"5. volume"`
-}
 
 // A single entry in a prices time series
-type PricesTimeSeriesEntry struct {
+type TimeSeriesEntry struct {
 	Timestamp time.Time
 	PriceData OHLCV
 }
 
-func parseCSVRecord(row []string) (*PricesTimeSeriesEntry, error) {
-	entry := &PricesTimeSeriesEntry{}
+// Requirement by csv parser
+func (e *TimeSeriesEntry) Key() time.Time {
+	return e.Timestamp
+}
+
+func (e *TimeSeriesEntry) Value() *OHLCV {
+	return &e.PriceData
+}
+
+type timeSeriesCSVRecordParser struct {
+	dateFormat string
+}
+
+func (p *timeSeriesCSVRecordParser) parseTimeSeriesCSVRecord(row []string) (parsers.CSVParsableEntry[time.Time, *OHLCV], error) {
+	entry := &TimeSeriesEntry{}
 	ohlcv := &OHLCV{}
 
-	t, err := time.Parse(time.DateTime, row[timestamp])
+	t, err := time.Parse(p.dateFormat, row[0])
 	if err != nil {
-		return nil, fmt.Errorf("error parsing timestamp %s: %w", row[timestamp], err)
+		return nil, fmt.Errorf("error parsing timestamp %s: %w", row[0], err)
 	}
 	entry.Timestamp = t
 
-	o, err := strconv.ParseFloat(row[open], 64)
+	o, err := strconv.ParseFloat(row[1], 64)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing open %s: %w", row[open], err)
+		return nil, fmt.Errorf("error parsing open %s: %w", row[1], err)
 	}
 	ohlcv.Open = o
 
-	h, err := strconv.ParseFloat(row[high], 64)
+	h, err := strconv.ParseFloat(row[2], 64)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing high %s: %w", row[high], err)
+		return nil, fmt.Errorf("error parsing high %s: %w", row[2], err)
 	}
 	ohlcv.High = h
 
-	l, err := strconv.ParseFloat(row[low], 64)
+	l, err := strconv.ParseFloat(row[3], 64)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing low %s: %w", row[low], err)
+		return nil, fmt.Errorf("error parsing low %s: %w", row[3], err)
 	}
 	ohlcv.Low = l
 
-	c, err := strconv.ParseFloat(row[open], 64)
+	c, err := strconv.ParseFloat(row[4], 64)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing close %s: %w", row[close], err)
+		return nil, fmt.Errorf("error parsing close %s: %w", row[4], err)
 	}
 	ohlcv.Close = c
 
-	v, err := strconv.ParseFloat(row[volume], 64)
+	v, err := strconv.ParseFloat(row[5], 64)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing volume %s: %w", row[volume], err)
+		return nil, fmt.Errorf("error parsing volume %s: %w", row[5], err)
 	}
 	ohlcv.Volume = v
 	entry.PriceData = *ohlcv
@@ -79,37 +81,7 @@ func parseCSVRecord(row []string) (*PricesTimeSeriesEntry, error) {
 
 // Parse csv prices timeseries data from a reader
 // Returns a map from timestamp to OHLCV
-func ParsePricesTimeSeriesCSV(r io.Reader) (map[time.Time]*OHLCV, error) {
-	reader := csv.NewReader(r)
-	reader.ReuseRecord = true
-	reader.LazyQuotes = true
-	reader.TrimLeadingSpace = true
-	reader.FieldsPerRecord = 6
-
-	// drop header
-	if _, err := reader.Read(); err != nil {
-		if err == io.EOF {
-			return nil, nil
-		}
-		return nil, err
-	}
-
-	entries := make(map[time.Time]*OHLCV)
-
-	for {
-		row, err := reader.Read()
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			return nil, err
-		}
-		entry, err := parseCSVRecord(row)
-		if err != nil {
-			return nil, err
-		}
-		entries[entry.Timestamp] = &entry.PriceData
-	}
-
-	return entries, nil
+func parseTimeSeriesCSV(r io.Reader, dateFormat string) (map[time.Time]*OHLCV, error) {
+	parser := &timeSeriesCSVRecordParser{dateFormat: dateFormat}
+	return parsers.ParseCSV[time.Time, *OHLCV](r, 6, parser.parseTimeSeriesCSVRecord)
 }
