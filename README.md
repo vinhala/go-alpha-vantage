@@ -1,5 +1,5 @@
 # go-alpha-vantage
-A comprehensive Alpha Vantage client written in Go with a focus on performance
+A comprehensive Alpha Vantage client written in Go.
 ## Usage
 Instructions on how to get the most of the client.
 ### API-Key
