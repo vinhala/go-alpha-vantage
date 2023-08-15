@@ -1,7 +1,7 @@
-package api
+package connection
 
 // Base URL of the Alpha Vantage API
-const API_BASE_URL = "www.alphavantage.co/query"
+const API_BASE_URL = "https://alphavantage.co/query"
 
 // Timeout for any Alpha Vantage API request
 const API_TIMEOUT = 10

@@ -1,4 +1,4 @@
-package api
+package connection
 
 import (
 	"errors"
@@ -13,7 +13,6 @@ type AlphaVantageConnection interface {
 }
 
 type alphaVantageConnection struct {
-	apiKey string
 	client *http.Client
 }
 
@@ -53,12 +52,11 @@ func (c *alphaVantageConnection) Request(request AlphaVantageRequest) (interface
 }
 
 // NewAlphaVantageConnection creates a new AlphaVantageConnection
-func NewAlphaVantageConnection(apiKey string) AlphaVantageConnection {
+func NewAlphaVantageConnection() AlphaVantageConnection {
 	client := &http.Client{
 		Timeout: time.Second * 5,
 	}
 	return &alphaVantageConnection{
-		apiKey: apiKey,
 		client: client,
 	}
 }

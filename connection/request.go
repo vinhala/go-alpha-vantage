@@ -1,4 +1,4 @@
-package api
+package connection
 
 import (
 	"net/http"

@@ -24,7 +24,7 @@ type OHLCV struct {
 	High   float64 `json:"2. high"`
 	Low    float64 `json:"3. low"`
 	Close  float64 `json:"4. close"`
-	Volume int64   `json:"5. volume"`
+	Volume float64 `json:"5. volume"`
 }
 
 // A single entry in a prices time series
@@ -67,7 +67,7 @@ func parseCSVRecord(row []string) (*PricesTimeSeriesEntry, error) {
 	}
 	ohlcv.Close = c
 
-	v, err := strconv.ParseInt(row[open], 10, 32)
+	v, err := strconv.ParseFloat(row[volume], 64)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing volume %s: %w", row[volume], err)
 	}

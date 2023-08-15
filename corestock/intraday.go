@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ga42quy/go-alpha-vantage/api"
+	"github.com/ga42quy/go-alpha-vantage/connection"
 )
 
 // IntradayInterval is the interval between two consecutive data points in the time series.
@@ -43,8 +43,8 @@ type IntradayResponse struct {
 	Timeseries map[time.Time]*OHLCV
 }
 
-func (r *IntradayRequest) QueryFunction() api.QueryFunction {
-	return api.TIME_SERIES_INTRADAY
+func (r *IntradayRequest) QueryFunction() connection.QueryFunction {
+	return connection.TIME_SERIES_INTRADAY
 }
 
 func (r *IntradayRequest) QueryParams() map[string]string {
