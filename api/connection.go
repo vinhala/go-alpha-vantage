@@ -9,7 +9,7 @@ import (
 
 // AlphaVantageConnection is an interface for connecting to the AlphaVantage API
 type AlphaVantageConnection interface {
-	Request(AlphaVantageRequest) (interface{}, error)
+	Request(request AlphaVantageRequest) (interface{}, error)
 }
 
 type alphaVantageConnection struct {
@@ -41,7 +41,7 @@ func makeURL(queryFunction QueryFunction, params map[string]string) (string, err
 }
 
 func (c *alphaVantageConnection) Request(request AlphaVantageRequest) (interface{}, error) {
-	url, err := makeURL(request.QueryFunction(), request.URLParams())
+	url, err := makeURL(request.QueryFunction(), request.QueryParams())
 	if err != nil {
 		return nil, err
 	}

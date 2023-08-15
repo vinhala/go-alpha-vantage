@@ -7,6 +7,6 @@ import (
 // Every request to AlphaVantage should implement this interface
 type AlphaVantageRequest interface {
 	QueryFunction() QueryFunction
-	URLParams() map[string]string
-	ParseResponse(*http.Response) (interface{}, error)
+	QueryParams() map[string]string
+	ParseResponse(response *http.Response) (interface{}, error)
 }
