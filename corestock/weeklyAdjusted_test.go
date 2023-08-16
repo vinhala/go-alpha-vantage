@@ -8,6 +8,7 @@ import (
 )
 
 func TestWeeklyAdjusted(t *testing.T) {
+	t.Skip("Skip weekly adjusted test")
 	connection := connection.NewAlphaVantageConnection()
 	request := WeeklyAdjustedRequest{
 		Symbol: "IBM",

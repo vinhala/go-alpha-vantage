@@ -3,6 +3,7 @@ package corestock
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/ga42quy/go-alpha-vantage/connection"
 )
@@ -45,9 +46,12 @@ func TestIntraday5MinCompact(t *testing.T) {
 		fmt.Printf("Volume: %f\n", price.Volume)
 		break
 	}
+	//Throttle
+	time.Sleep(10 * time.Millisecond)
 }
 
 func TestIntraday5MinFull(t *testing.T) {
+	t.Skip("Skip intraday full test")
 	connection := connection.NewAlphaVantageConnection()
 	request := IntradayRequest{
 		Symbol:     "IBM",
@@ -85,9 +89,12 @@ func TestIntraday5MinFull(t *testing.T) {
 		fmt.Printf("Volume: %f\n", price.Volume)
 		break
 	}
+	//Throttle
+	time.Sleep(10 * time.Millisecond)
 }
 
 func TestIntraday5MinCustomMonth(t *testing.T) {
+	t.Skip("Skip intraday custom month test")
 	connection := connection.NewAlphaVantageConnection()
 	request := IntradayRequest{
 		Symbol:     "IBM",

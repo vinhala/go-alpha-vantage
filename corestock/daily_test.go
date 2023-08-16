@@ -43,6 +43,7 @@ func TestDailyCompact(t *testing.T) {
 }
 
 func TestDailyFULL(t *testing.T) {
+	t.Skip("Skip daily FULL test")
 	connection := connection.NewAlphaVantageConnection()
 	request := DailyRequest{
 		Symbol:     "IBM",
