@@ -16,6 +16,15 @@ const (
 	FULL    OutputSize = "full"
 )
 
+// OHLCV is the struct for the open, high, low, close, and volume of a financial instrument
+type OHLCV struct {
+	Open   float64 `json:"1. open"`
+	High   float64 `json:"2. high"`
+	Low    float64 `json:"3. low"`
+	Close  float64 `json:"4. close"`
+	Volume float64 `json:"5. volume"`
+}
+
 // A single entry in a prices time series
 type TimeSeriesEntry struct {
 	Timestamp time.Time

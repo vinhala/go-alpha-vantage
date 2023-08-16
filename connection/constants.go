@@ -22,4 +22,8 @@ const (
 	TIME_SERIES_WEEKLY_ADJUSTED QueryFunction = "TIME_SERIES_WEEKLY_ADJUSTED"
 	// Time Series Monthly
 	TIME_SERIES_MONTHLY QueryFunction = "TIME_SERIES_MONTHLY"
+	// Time Series Monthly Adjusted
+	TIME_SERIES_MONTHLY_ADJUSTED QueryFunction = "TIME_SERIES_MONTHLY_ADJUSTED"
+	// Global Quote
+	GLOBAL_QUOTE QueryFunction = "GLOBAL_QUOTE"
 )
