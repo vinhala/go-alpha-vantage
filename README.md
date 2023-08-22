@@ -35,4 +35,7 @@ For more examples you may also take a look at the tests
 
 ## Contributions
 Contributions are always welcome! If you would like to help create the most comprehensive go-client for the Alpha Vantage API, take a look at the past releases to determine which features are still missing.
+
 After you have identified an area of improvement create a new branch and implement the changes. After you have done so open a new pull request and set me (@ga42quy) as reviewer.
+
+**Important:** you need to be a collaborator to contribute to the code-base. You can become one by leaving a comment in the *Collaborators* discussion.
